@@ -6,7 +6,7 @@ CXX_FLAGS = -static
 EXE = rest_streamer_controller 
 
 all:
-	$(CXX) $(CXX_FLAGS) -o $(EXAMPLE_EXE) httphandler.cpp strutil.cpp  api.cpp executor.cpp $(INCLUDE) $(LIB_DIR) $(LIBS) 
+	$(CXX) $(CXX_FLAGS) -o $(EXE) httphandler.cpp strutil.cpp  api.cpp executor.cpp $(INCLUDE) $(LIB_DIR) $(LIBS) 
 
 clean:
 	rm -f $(EXE)

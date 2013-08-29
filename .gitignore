@@ -4,3 +4,5 @@ streamer-udp-grapes-static
 *.o
 rest_streamer_controller
 NetworkID
+thirdparty-lib/boost
+thirdparty-lib/mhttpd

@@ -85,6 +85,11 @@ string int2str(int n)
 	return ss.str();
 }
 
+inline bool file_exist (const std::string& name) {
+  struct stat buffer;   
+  return (stat (name.c_str(), &buffer) == 0); 
+}
+
 class ChannelStreamer {
 	private:
 		int process_id;
@@ -103,15 +108,23 @@ class ChannelStreamer {
 			if(valid_pid())
 				killCurrent();
 			debug("starting streamer");
-			process_id = fork();
-			if (process_id == 0)
-				while (true)
-					execl(STREAMER_EXE,STREAMER_EXE,"-P",get_random_port().c_str(),
-						 "-i",pc->get_source_ip().c_str(),"-p",pc->get_source_port().c_str(),
-							"-F",get_outmodule_flags(pc).c_str(),(char*)0);
+			if(file_exist(STREAMER_EXE))
+			{
+				process_id = fork();
+				if (process_id == 0)
+					while (true)
+						execl(STREAMER_EXE,STREAMER_EXE,"-P",get_random_port().c_str(),
+							 "-i",pc->get_source_ip().c_str(),"-p",pc->get_source_port().c_str(),
+								"-F",get_outmodule_flags(pc).c_str(),(char*)0);
 
-			debug("process id:" + int2str(process_id));
-			return true;
+				debug("process id:" + int2str(process_id));
+
+				return true;
+			} else
+			{
+				debug(std::string("File ") + STREAMER_EXE + std::string(" not found."));
+				return false;
+			}
 		}
 		
 		string get_random_port()

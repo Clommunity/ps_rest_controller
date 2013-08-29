@@ -35,34 +35,62 @@ Executor::Executor()
 bool Executor::about(const map<string,string>& args, outputType type,  string& response)
 {
 	string streamer_running = ((ChannelStreamer::getInstance())->valid_pid()) ? "yes" : "no" ;
-	ptree info;
-	info.put("application.name","ReST streamer controller");
-	info.put("application.version","0.0.0");
-	info.put("application.streamer_running",streamer_running);
+	map<string,string> msgs;
+	msgs["application.name"] = "ReST streamer controller";
+	msgs["application.version"] = "0.0.1";
+	msgs["application.streamer_running"] = streamer_running; 
 
-  _generateOutput(&info, type, response);
-  std::cout << response << std::endl;
+	return data_msg(msgs,type, response);
+}
+
+bool Executor::data_msg(const map<string,string>& args, outputType type,  string& response)
+/* Simply display the args data. Useful for giving alerts and errors report */
+{
+	ptree errorInfo;
+	map<string,string>::const_iterator mit;
+	for(mit = args.begin(); mit != args.end(); mit++)
+		errorInfo.put(mit->first, mit->second);
+	
+
+	_generateOutput(&errorInfo, type, response);
 	return true;
 }
 
 bool Executor::channelPort(const map<string,string>& args, outputType type,  string& response)
 {
 	PeerChannel* pc;
+	bool success = true;
+	map<string,string> msgs;
+
 	try {
 		pc = new PeerChannel(args);
-	} catch (std::exception& e)
-	{ return false; }
+	} catch (std::exception& e)	{ 
+		msgs["error"] = "parameters required.";
+		data_msg(msgs,type,response);
+		success = false; 
+	}
 
-	pc->set_local_udp_port(7710);
-	ptree channelInfo = pc->toParametersTree();
+	if(success)
+	{	
+		pc->set_local_udp_port(7710); // FIXED udp port
 	
-	(ChannelStreamer::getInstance())->startProcess(pc);
+		if((ChannelStreamer::getInstance())->startProcess(pc) == true)
+		{
+			ptree channelInfo = pc->toParametersTree();
+		  _generateOutput(&channelInfo, type, response);
+  		//std::cout << response << std::endl; // DEBUG purpose
+			success = true;
+		}
+		else
+		{
+			msgs["error"] = "unable to start the streamer process.";
+			data_msg(msgs,type,response);
+			success = false;
+		}
 
-  _generateOutput(&channelInfo, type, response);
-  std::cout << response << std::endl;
-
-	delete(pc);
-  return true;
+		delete(pc);
+	}
+  return success;
 
 }
 

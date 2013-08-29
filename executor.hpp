@@ -19,6 +19,7 @@ public:
     Executor();
     bool channelPort(const map<string,string>& args, outputType type, string& response);
     bool about(const map<string,string>& args, outputType type, string& response);
+    bool data_msg(const map<string,string>& args, outputType type, string& response);
 private:
     void _generateOutput(void *data, outputType type, string& output);
 

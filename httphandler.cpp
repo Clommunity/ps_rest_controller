@@ -174,6 +174,8 @@ int main (int argc, char *const *argv)
     signal(SIGTERM, handle_term);
 		parse_args(argc,argv);
 		ConfManager::print_conf();
+		if(!ConfManager::validate_conf())
+			exit(1);
 
 		http(&ConfManager::http_port);
     return 0;

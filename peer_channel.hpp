@@ -9,11 +9,10 @@
 #include <sstream>
 #include <signal.h>
 #include <sys/wait.h>
+#include <utils.hpp>
 
 
 using boost::property_tree::ptree;
-
-void debug(string msg) {std::cout << "[DEBUG] " << msg << std::endl;}
 
 class Missing_parameter_exception: public std::exception
 {
@@ -78,17 +77,6 @@ class PeerChannel {
 		}
 };
 
-string int2str(int n)
-{
-	std::ostringstream ss;
-	ss << n;
-	return ss.str();
-}
-
-inline bool file_exist (const std::string& name) {
-  struct stat buffer;   
-  return (stat (name.c_str(), &buffer) == 0); 
-}
 
 class ChannelStreamer {
 	private:
@@ -107,9 +95,9 @@ class ChannelStreamer {
 		{
 			if(valid_pid())
 				killCurrent();
-			if(file_exist(ConfManager::streamer_file))
+			if(Utils::file_exist(ConfManager::streamer_file))
 			{
-				debug("starting streamer");
+				Utils::debug("starting streamer");
 				process_id = fork();
 				if (process_id == 0)
 					while (true)
@@ -117,12 +105,12 @@ class ChannelStreamer {
 							 "-i",pc->get_source_ip().c_str(),"-p",pc->get_source_port().c_str(),
 								"-F",get_outmodule_flags(pc).c_str(),(char*)0);
 
-				debug("process id:" + int2str(process_id));
+				Utils::debug("process id:" + Utils::int2str(process_id));
 
 				return true;
 			} else
 			{
-				debug(std::string("File ") + ConfManager::streamer_file + std::string(" not found."));
+				Utils::debug(std::string("File ") + ConfManager::streamer_file + std::string(" not found."));
 				return false;
 			}
 		}
@@ -131,7 +119,7 @@ class ChannelStreamer {
 		{
 			srand(time(NULL));
 			int streamer_port = 6000 + (rand() % 1000);
-			return int2str(streamer_port);
+			return Utils::int2str(streamer_port);
 		}
 
 		string get_outmodule_flags(PeerChannel* pc)
@@ -143,7 +131,7 @@ class ChannelStreamer {
 
 		bool killCurrent()
 		{
-			debug("killing streamer");
+			Utils::debug("killing streamer");
 			kill(process_id,SIGINT);
 			waitpid(process_id,0,0);
 			process_id = 0;

@@ -143,13 +143,10 @@ int main (int argc, char *const *argv)
         printf ("%s PORT\n", argv[0]);
         exit(1);
     }
-//    daemon(0,0);
+//    daemon(0,0); // demonize and redirect all output to /dev/null
     signal(SIGTERM, handle_term);
     int port = atoi(argv[1]);
-    pthread_t  thread;
-    if ( 0 != pthread_create(&thread, 0 , http, &port)){
-        exit(1);
-    }
-    pthread_join(thread, 0);
+
+		http(&port);
     return 0;
 }

@@ -107,9 +107,9 @@ class ChannelStreamer {
 		{
 			if(valid_pid())
 				killCurrent();
-			debug("starting streamer");
 			if(file_exist(STREAMER_EXE))
 			{
+				debug("starting streamer");
 				process_id = fork();
 				if (process_id == 0)
 					while (true)

@@ -1,12 +1,20 @@
-LIB_DIR = -L../boost/lib -L../microhttpd/lib
+TRDPARTYLIB = thirdparty-lib
+LIB_DIR = -L$(TRDPARTYLIB)/boost/lib -L$(TRDPARTYLIB)/mhttpd/lib
+INCLUDE = -I$(TRDPARTYLIB)/boost/include -I$(TRDPARTYLIB)/mhttpd/include -I.
+
 LIBS = -lmicrohttpd -lboost_regex -lpthread -lrt
-INCLUDE = -I../boost/include -I../microhttpd/include -I.
 CXX = g++
 CXX_FLAGS = -static 
 EXE = rest_streamer_controller 
 
-all:
+$(EXE): lib_prepare
 	$(CXX) $(CXX_FLAGS) -o $(EXE) httphandler.cpp strutil.cpp  api.cpp executor.cpp $(INCLUDE) $(LIB_DIR) $(LIBS) 
+
+lib_prepare:
+	make -C $(TRDPARTYLIB)
 
 clean:
 	rm -f $(EXE)
+
+distclean: clean
+	make -C $(TRDPARTYLIB) clean

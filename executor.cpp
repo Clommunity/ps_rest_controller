@@ -14,6 +14,7 @@
 #include <executor.hpp>
 #include <strutil.hpp>
 #include <peer_channel.hpp>
+#include <conf_manager.hpp>
 
 using namespace ourapi;
 using std::vector;
@@ -72,7 +73,7 @@ bool Executor::channelPort(const map<string,string>& args, outputType type,  str
 
 	if(success)
 	{	
-		pc->set_local_udp_port(7710); // FIXED udp port
+		pc->set_local_udp_port(ConfManager::udp_port); // FIXED udp port
 	
 		if((ChannelStreamer::getInstance())->startProcess(pc) == true)
 		{

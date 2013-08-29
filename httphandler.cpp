@@ -7,6 +7,7 @@
 #include <string>
 
 #include <api.hpp>
+#include <conf_manager.hpp>
 
 using std::map;
 using std::string;
@@ -136,17 +137,44 @@ void* http(void *arg)
     return 0;
 }
 
+void usage()
+{
+	std::cout << "rest_streamer_controller usage:" << std::endl;
+	std::cout << "\t./rest_streamer_controller [-h] [-p <http_port>] [ -s <streamer_executable> ] [ -u <default_udp_port> ]" << std::endl << std::endl;
+	std::cout << "Defualt values are:" << std::endl;
+	ConfManager::print_conf();
+}
+
+void parse_args(int argc, char *const *argv)
+{
+	int c;
+	while ((c = getopt (argc, argv, "p:s:u:h")) != -1)
+  	switch (c)
+    {
+			case 'p':
+				ConfManager::http_port = atoi(optarg);
+				break;
+			case 'u':
+				ConfManager::udp_port = atoi(optarg);
+				break;
+			case 's':
+				ConfManager::streamer_file = optarg;
+				break;
+			case 'h':
+      default:
+      	usage();
+				exit(1);
+		}
+}
+
 int main (int argc, char *const *argv)
 {
 
-    if (argc != 2){
-        printf ("%s PORT\n", argv[0]);
-        exit(1);
-    }
 //    daemon(0,0); // demonize and redirect all output to /dev/null
     signal(SIGTERM, handle_term);
-    int port = atoi(argv[1]);
+		parse_args(argc,argv);
+		ConfManager::print_conf();
 
-		http(&port);
+		http(&ConfManager::http_port);
     return 0;
 }

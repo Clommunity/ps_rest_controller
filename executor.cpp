@@ -35,7 +35,7 @@ Executor::Executor()
 
 bool Executor::about(const map<string,string>& args, outputType type,  string& response)
 {
-	string streamer_running = ((ChannelStreamer::getInstance())->valid_pid()) ? "yes" : "no" ;
+	string streamer_running = ((ChannelStreamer::getInstance())->streamer_running()) ? "yes" : "no" ;
 	map<string,string> msgs;
 	msgs["application.name"] = "ReST streamer controller";
 	msgs["application.version"] = "0.0.1";

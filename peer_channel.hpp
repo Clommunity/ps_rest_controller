@@ -93,7 +93,7 @@ class ChannelStreamer {
 		}
 		bool startProcess(PeerChannel* pc)
 		{
-			if(valid_pid())
+			if(streamer_running())
 				killCurrent();
 			if(Utils::file_exist(ConfManager::streamer_file))
 			{
@@ -101,7 +101,8 @@ class ChannelStreamer {
 				process_id = fork();
 				if (process_id == 0)
 					while (true)
-						execl(ConfManager::streamer_file.c_str(),ConfManager::streamer_file.c_str(),"-P",get_random_port().c_str(),
+						execl(ConfManager::streamer_file.c_str(),ConfManager::streamer_file.c_str(),
+							"-P",get_random_port().c_str(),
 							 "-i",pc->get_source_ip().c_str(),"-p",pc->get_source_port().c_str(),
 								"-F",get_outmodule_flags(pc).c_str(),(char*)0);
 
@@ -131,13 +132,24 @@ class ChannelStreamer {
 
 		bool killCurrent()
 		{
-			Utils::debug("killing streamer");
-			kill(process_id,SIGINT);
-			waitpid(process_id,0,0);
-			process_id = 0;
-			return true;
+			if( streamer_running() )
+			{	
+				Utils::debug("killing streamer");
+				kill(process_id,SIGINT);
+				waitpid(process_id,0,0);
+				process_id = 0;
+				return true;
+			} else
+				return false;
 		}
 
+		bool streamer_running()
+		{
+			if (!valid_pid()) return false;
+			int status;
+			pid_t result = waitpid(process_id, &status, WNOHANG);	
+			return result == 0 ? true : false;
+		}
 		bool valid_pid()
 		{ return process_id > 0 ? true : false; }
 

@@ -6,8 +6,8 @@ lib_prepare: boost mhttpd
 boost:
 	wget http://garr.dl.sourceforge.net/project/boost/boost/1.54.0/boost_1_54_0.tar.bz2
 	tar --bzip2 -xf *.tar.bz2  && rm *.tar.bz2
-	cd boost_1_54_0 && ./bootstrap.sh --prefix=$(BOOST_LIB) --with-libraries=regex
-	cd boost_1_54_0 && ./b2 install
+	mkdir -p $(BOOST_LIB)/include
+	mv boost_1_54_0/boost $(BOOST_LIB)/include/
 	rm -rf boost_1_54_0
 
 mhttpd:

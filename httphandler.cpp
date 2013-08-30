@@ -8,6 +8,7 @@
 
 #include <api.hpp>
 #include <conf_manager.hpp>
+#include <utils.hpp>
 
 using std::map;
 using std::string;
@@ -140,7 +141,10 @@ void* http(void *arg)
 void usage()
 {
 	std::cout << "rest_streamer_controller usage:" << std::endl;
-	std::cout << "\t./rest_streamer_controller [-h] [-p <http_port>] [ -s <streamer_executable> ] [ -u <default_udp_port> ]" << std::endl << std::endl;
+	std::cout << "\t./rest_streamer_controller [-h] [-p <http_port>] [ -s <streamer_executable> ] [ -u <default_udp_port> ] [-v] [-m]"  << std::endl << std::endl;
+	std::cout << "\t-h\t\tshow this help and exit" << std::endl;
+	std::cout << "\t-v\t\tverbosity" << std::endl;
+	std::cout << "\t-m\t\tenable multiple streamer support" << std::endl;
 	std::cout << "Defualt values are:" << std::endl;
 	ConfManager::print_conf();
 }
@@ -148,7 +152,7 @@ void usage()
 void parse_args(int argc, char *const *argv)
 {
 	int c;
-	while ((c = getopt (argc, argv, "p:s:u:h")) != -1)
+	while ((c = getopt (argc, argv, "p:s:u:hmv")) != -1)
   	switch (c)
     {
 			case 'p':
@@ -160,6 +164,12 @@ void parse_args(int argc, char *const *argv)
 			case 's':
 				ConfManager::streamer_file = optarg;
 				break;
+			case 'v':
+				ConfManager::debug = true;
+				break;
+			case 'm':
+				ConfManager::single_streamer = false;
+				break;	
 			case 'h':
       default:
       	usage();
@@ -174,7 +184,7 @@ int main (int argc, char *const *argv)
     signal(SIGTERM, handle_term);
 		parse_args(argc,argv);
 		ConfManager::print_conf();
-		if(!ConfManager::validate_conf())
+		if(!Utils::validate_conf())
 			exit(1);
 
 		http(&ConfManager::http_port);

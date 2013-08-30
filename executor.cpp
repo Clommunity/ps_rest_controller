@@ -73,7 +73,10 @@ bool Executor::channelPort(const map<string,string>& args, outputType type,  str
 
 	if(success)
 	{	
-		pc->set_local_udp_port(ConfManager::udp_port); // FIXED udp port
+		if(ConfManager::single_streamer==true)
+			pc->set_local_udp_port(ConfManager::udp_port); // FIXED udp port
+		else
+			pc->set_local_udp_port(Utils::random_int(7000,8000)); // FIXED udp port
 	
 		if((ChannelStreamer::getInstance())->startProcess(pc) == true)
 		{

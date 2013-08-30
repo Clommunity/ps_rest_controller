@@ -118,8 +118,7 @@ class ChannelStreamer {
 		
 		string get_random_port()
 		{
-			srand(time(NULL));
-			int streamer_port = 6000 + (rand() % 1000);
+			int streamer_port = Utils::random_int(6000,7000); 
 			return Utils::int2str(streamer_port);
 		}
 

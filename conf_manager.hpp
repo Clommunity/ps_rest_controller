@@ -33,20 +33,13 @@ class ConfManager {
 			inst = new ConfManager();
 		return inst;
 	}
-	static int http_port() { return instance()->get_http_port();}
-	static int udp_port() { return instance()->get_udp_port();}
-	static bool debug() { return instance()->get_debug();}
-	static bool single_streamer() { return instance()->get_single_streamer();}
-	static string streamer_file() { return instance()->get_streamer_filename();}
-	static string public_folder() { return instance()->get_public_folder();}
+	static int http_port() { return instance()->_http_port;}
+	static int udp_port() { return instance()->_udp_port;}
+	static bool debug() { return instance()->_debug;}
+	static bool single_streamer() { return instance()->_single_streamer;}
+	static string streamer_file() { return instance()->_streamer_file;}
+	static string public_folder() { return instance()->_public_folder;}
 
-	int get_http_port() { return _http_port;}
-	int get_udp_port() { return _udp_port;}
-	string get_streamer_filename() { return _streamer_file;}
-	string get_public_folder() { return _public_folder;}
-	bool get_debug() { return _debug;}
-	bool get_single_streamer() { return _single_streamer;}
-	
 	void set_http_port(int arg) {_http_port = arg;}
 	void set_udp_port(int arg) {_udp_port = arg;}
 	void set_single_streamer(bool arg) {_single_streamer = arg;}

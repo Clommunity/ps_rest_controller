@@ -4,9 +4,16 @@
 
 #include <api.hpp>
 #include <conf_manager.hpp>
+#include <utils.hpp>
 #include <strutil.hpp>
 
 using namespace ourapi;
+
+bool in_public_folder(string filename)
+{
+	Utils::debug("checking existence of: "+ConfManager::public_folder() +filename);
+	return Utils::file_exist(ConfManager::public_folder() + filename);
+}
 
 struct validate_data
 {
@@ -46,6 +53,17 @@ bool api::executeAPI(const string& url, const map<string, string>& argvals, stri
     return _executeAPI(url, argvals, type, response);
 }
 
+string find_index_file()
+{
+	// TODO think a better implementation
+	Utils::debug("finding index");
+	if( Utils::file_exist(ConfManager::public_folder() + "/index.htm"))
+		return ConfManager::public_folder() + "/index.htm";
+	if( Utils::file_exist(ConfManager::public_folder() + "/index.html"))
+		return ConfManager::public_folder() + "/index.html";
+	return "/";
+}
+
 bool api::_executeAPI(const string& url, const map<string,string>& argvals, 
         Executor::outputType type, string& response)
 {
@@ -54,6 +72,16 @@ bool api::_executeAPI(const string& url, const map<string,string>& argvals,
         ret = _executor.channelPort(argvals, type, response);
     if (url == "/about")
         ret = _executor.about(argvals, type, response);
+    if (in_public_folder(url)) {
+				if ( url == "/" )
+				{
+					response = find_index_file();
+					Utils::debug(response);
+				}
+				else
+					response = ConfManager::public_folder() + url;
+        ret = _executor.public_file(argvals, type, response);
+		}
 
     return ret;
 }
@@ -66,7 +94,7 @@ bool api::_validate(const void *data)
     it = _apiparams.find(vdata->api);
 
     if ( it == _apiparams.end()){
-        return false;
+        return in_public_folder(vdata->api); // if not an api command check if is a public file
     }
     set<string>::iterator it2 = vdata->params->begin();
     while (it2 != vdata->params->end()) { //TODO this check doesn't work

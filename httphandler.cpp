@@ -141,7 +141,7 @@ void* http(void *arg)
 void usage()
 {
 	std::cout << "rest_streamer_controller usage:" << std::endl;
-	std::cout << "\t./rest_streamer_controller [-h] [-p <http_port>] [ -s <streamer_executable> ] [ -u <default_udp_port> ] [-v] [-m]"  << std::endl << std::endl;
+	std::cout << "\t./rest_streamer_controller [-h] [-p <http_port>] [ -s <streamer_executable> ] [ -u <default_udp_port> ] [-v] [-m] [-f <public_folder>]"  << std::endl << std::endl;
 	std::cout << "\t-h\t\tshow this help and exit" << std::endl;
 	std::cout << "\t-v\t\tverbosity" << std::endl;
 	std::cout << "\t-m\t\tenable multiple streamer support" << std::endl;
@@ -153,7 +153,7 @@ void parse_args(int argc, char *const *argv)
 {
 	int c;
 	ConfManager* ist = ConfManager::instance();
-	while ((c = getopt (argc, argv, "p:s:u:hmv")) != -1)
+	while ((c = getopt (argc, argv, "f:p:s:u:hmv")) != -1)
   	switch (c)
     {
 			case 'p':	
@@ -161,6 +161,9 @@ void parse_args(int argc, char *const *argv)
 				break;
 			case 'u':
 				ist->set_udp_port(atoi(optarg));
+				break;
+			case 'f':
+				ist->set_public_folder(optarg);
 				break;
 			case 's':
 				ist->set_streamer_file(optarg);

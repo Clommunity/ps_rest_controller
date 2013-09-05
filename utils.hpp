@@ -2,6 +2,7 @@
 #define __UTILS__HPP__ 1
 
 #include <sstream>
+#include <fstream>
 #include <conf_manager.hpp>
 
 namespace Utils {
@@ -13,8 +14,11 @@ namespace Utils {
 	inline void error(string msg) {std::cerr << "[ERROR] " << msg << std::endl;}
 
 	inline bool file_exist (const std::string& name) {
-  	struct stat buffer;   
-  	return (stat (name.c_str(), &buffer) == 0); 
+		std::ifstream file (name.c_str());
+		bool ex = file.good();
+		if(ex)
+			file.close();
+  	return ex; 
 	}
 
 	inline string int2str(int n)
@@ -51,6 +55,11 @@ namespace Utils {
 		{
 			success = false;
 			error("Same udp and http port number. Maybe you should sleep a little..");
+		}			
+		if(!file_exist(ConfManager::public_folder()))
+		{
+			success = false;
+			error("The public files folder choosed (" + ConfManager::public_folder() + ") doesn't exist.");
 		}			
 			
 		return success;

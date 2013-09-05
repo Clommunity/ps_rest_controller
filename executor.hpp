@@ -18,6 +18,7 @@ public:
     };
     Executor();
     bool channelPort(const map<string,string>& args, outputType type, string& response);
+    bool public_file(const map<string,string>& args, outputType type, string& response);
     bool about(const map<string,string>& args, outputType type, string& response);
     bool data_msg(const map<string,string>& args, outputType type, string& response);
 private:

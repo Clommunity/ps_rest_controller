@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <fstream>
 
 #include <stdint.h>
 #include <boost/regex.hpp>
@@ -30,7 +31,26 @@ using boost::regex;
 
 
 Executor::Executor()
+{}
+
+bool Executor::public_file(const map<string,string>& args, outputType type,  string& response)
 {
+	Utils::debug("I'm trying to serve a public file");
+	std::ifstream file (response.c_str());
+	std::ostringstream out_stream;
+	if (file.is_open())
+	{
+		while (file.good())
+		{
+			getline(file,response);
+			out_stream << response << std::endl;
+		}
+		response = out_stream.str();
+		
+		file.close();
+	}
+	else
+		return false;
 }
 
 bool Executor::about(const map<string,string>& args, outputType type,  string& response)

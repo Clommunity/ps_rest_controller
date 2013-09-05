@@ -152,23 +152,24 @@ void usage()
 void parse_args(int argc, char *const *argv)
 {
 	int c;
+	ConfManager* ist = ConfManager::instance();
 	while ((c = getopt (argc, argv, "p:s:u:hmv")) != -1)
   	switch (c)
     {
-			case 'p':
-				ConfManager::http_port = atoi(optarg);
+			case 'p':	
+				ist->set_http_port(atoi(optarg));
 				break;
 			case 'u':
-				ConfManager::udp_port = atoi(optarg);
+				ist->set_udp_port(atoi(optarg));
 				break;
 			case 's':
-				ConfManager::streamer_file = optarg;
+				ist->set_streamer_file(optarg);
 				break;
 			case 'v':
-				ConfManager::debug = true;
+				ist->set_debug(true);
 				break;
 			case 'm':
-				ConfManager::single_streamer = false;
+				ist->set_single_streamer(false);
 				break;	
 			case 'h':
       default:
@@ -187,6 +188,7 @@ int main (int argc, char *const *argv)
 		if(!Utils::validate_conf())
 			exit(1);
 
-		http(&ConfManager::http_port);
+		int port = ConfManager::http_port();
+		http(&port);
     return 0;
 }

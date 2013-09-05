@@ -6,7 +6,7 @@
 
 namespace Utils {
 	inline void debug(string msg) {
-		if(ConfManager::debug == true)
+		if(ConfManager::debug() == true)
 			std::cout << "[DEBUG] " << msg << std::endl;
 	}
 
@@ -32,22 +32,22 @@ namespace Utils {
 	static bool validate_conf()
 	{
 		bool success = true;
-		if(!file_exist(ConfManager::streamer_file))
+		if(!file_exist(ConfManager::streamer_file()))
 		{
 			success = false;
-			Utils::error("Streamer file \""+ ConfManager::streamer_file +"\" not found..");
+			Utils::error("Streamer file \""+ ConfManager::streamer_file() +"\" not found..");
 		}
-		if(ConfManager::http_port < 1025)
+		if(ConfManager::http_port() < 1025)
 		{
 			success = false;
 			error("Invalid HTTP port.");
 		}
-		if(ConfManager::udp_port < 1025)
+		if(ConfManager::udp_port() < 1025)
 		{
 			success = false;
 			error("Invalid UDP port.");
 		}
-		if(ConfManager::udp_port == ConfManager::http_port)
+		if(ConfManager::udp_port() == ConfManager::http_port())
 		{
 			success = false;
 			error("Same udp and http port number. Maybe you should sleep a little..");

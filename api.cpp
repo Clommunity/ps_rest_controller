@@ -3,6 +3,7 @@
 #include <boost/foreach.hpp>
 
 #include <api.hpp>
+#include <conf_manager.hpp>
 #include <strutil.hpp>
 
 using namespace ourapi;

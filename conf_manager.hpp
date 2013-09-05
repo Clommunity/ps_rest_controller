@@ -4,22 +4,67 @@
 #include<string>
 #include<iostream>
 
-namespace ConfManager {
-		static int http_port = 1234;
-		static string streamer_file = "./streamer-udp-grapes-static";
-		static int udp_port = 7710;
-		static bool single_streamer = true;
-		static bool debug = false;
+class ConfManager {
+	int _http_port;
+	string _streamer_file;
+	string _public_folder;
+	int _udp_port;
+	bool _single_streamer;
+	bool _debug;
 
-		static void print_conf()
-		{
-			std::cout << "http_port = " << ConfManager::http_port << std::endl;
-			std::cout << "streamer_executable = " << ConfManager::streamer_file << std::endl;
-			std::cout << "default_udp_port = " << ConfManager::udp_port << std::endl;
-			std::cout << "verbosity = " << (debug ? "yes" : "no") << std::endl;
-			std::cout << "multiple streamer support = " << (!single_streamer ? "yes" : "no") << std::endl;
-		}
 
-}
+	ConfManager()
+	{
+			_http_port = 1234;
+		_streamer_file = "./streamer-udp-grapes-static";
+		_public_folder = "public_html";
+		_udp_port = 7710;
+		_single_streamer = true;
+		_debug = false;
+	}	
+	ConfManager(ConfManager const&);
+	void operator=(ConfManager const&);
+	public:
+
+	static ConfManager* instance() 
+	{
+		static ConfManager *inst; // instance
+		if( inst == NULL)
+			inst = new ConfManager();
+		return inst;
+	}
+	static int http_port() { return instance()->get_http_port();}
+	static int udp_port() { return instance()->get_udp_port();}
+	static bool debug() { return instance()->get_debug();}
+	static bool single_streamer() { return instance()->get_single_streamer();}
+	static string streamer_file() { return instance()->get_streamer_filename();}
+	static string public_folder() { return instance()->get_public_folder();}
+
+	int get_http_port() { return _http_port;}
+	int get_udp_port() { return _udp_port;}
+	string get_streamer_filename() { return _streamer_file;}
+	string get_public_folder() { return _public_folder;}
+	bool get_debug() { return _debug;}
+	bool get_single_streamer() { return _single_streamer;}
+	
+	void set_http_port(int arg) {_http_port = arg;}
+	void set_udp_port(int arg) {_udp_port = arg;}
+	void set_single_streamer(bool arg) {_single_streamer = arg;}
+	void set_debug(bool arg) {_debug = arg;}
+	void set_streamer_file(string arg) {_streamer_file = arg;}
+	void set_public_folder(string arg) {_public_folder = arg;}
+
+
+	static void print_conf()
+	{	
+		std::cout << "http_port = " << http_port() << std::endl;
+		std::cout << "streamer_executable = " << streamer_file() << std::endl;
+		std::cout << "public_folder = " << public_folder() << std::endl;
+		std::cout << "default_udp_port = " << udp_port() << std::endl;
+		std::cout << "verbosity = " << (debug() ? "yes" : "no") << std::endl;
+		std::cout << "multiple streamer support = " << (!(single_streamer()) ? "yes" : "no") << std::endl;
+	}
+
+};
 
 #endif

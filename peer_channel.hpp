@@ -95,13 +95,13 @@ class ChannelStreamer {
 		{
 			if(streamer_running())
 				killCurrent();
-			if(Utils::file_exist(ConfManager::streamer_file))
+			if(Utils::file_exist(ConfManager::streamer_file()))
 			{
 				Utils::debug("starting streamer");
 				process_id = fork();
 				if (process_id == 0)
 					while (true)
-						execl(ConfManager::streamer_file.c_str(),ConfManager::streamer_file.c_str(),
+						execl(ConfManager::streamer_file().c_str(),ConfManager::streamer_file().c_str(),
 							"-P",get_random_port().c_str(),
 							 "-i",pc->get_source_ip().c_str(),"-p",pc->get_source_port().c_str(),
 								"-F",get_outmodule_flags(pc).c_str(),(char*)0);
@@ -111,7 +111,7 @@ class ChannelStreamer {
 				return true;
 			} else
 			{
-				Utils::debug(std::string("File ") + ConfManager::streamer_file + std::string(" not found."));
+				Utils::debug(std::string("File ") + ConfManager::streamer_file() + std::string(" not found."));
 				return false;
 			}
 		}

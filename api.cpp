@@ -74,10 +74,7 @@ bool api::_executeAPI(const string& url, const map<string,string>& argvals,
         ret = _executor.about(argvals, type, response);
     if (in_public_folder(url)) {
 				if ( url == "/" )
-				{
 					response = find_index_file();
-					Utils::debug(response);
-				}
 				else
 					response = ConfManager::public_folder() + url;
         ret = _executor.public_file(argvals, type, response);

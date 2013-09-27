@@ -1,6 +1,5 @@
 *.swp
 cscope.*
-streamer-udp-grapes-static
 *.o
 rest_streamer_controller
 NetworkID

@@ -7,8 +7,12 @@ CXX = g++
 CXX_FLAGS = -static 
 EXE = rest_streamer_controller 
 
-$(EXE): lib_prepare
+$(EXE): gui_prepare lib_prepare
 	$(CXX) $(CXX_FLAGS) -o $(EXE) httphandler.cpp strutil.cpp  api.cpp executor.cpp $(INCLUDE) $(LIB_DIR) $(LIBS) 
+
+gui_prepare:
+	git submodule init
+	git submodule update
 
 lib_prepare:
 	make -C $(TRDPARTYLIB)

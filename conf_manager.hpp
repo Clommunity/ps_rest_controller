@@ -19,7 +19,7 @@ class ConfManager {
 			_http_port = 1234;
 			_udp_addr = "127.0.0.1";
 		_streamer_file = "./streamer-udp-grapes-static";
-		_public_folder = "public_html";
+		_public_folder = "public_web";
 		_udp_port = 7710;
 		_single_streamer = true;
 		_debug = false;

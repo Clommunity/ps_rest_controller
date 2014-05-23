@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+  <title>VLC/peerstreamer streaming page</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <link href="vlc-plugin.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="vlc-utils.js"></script>
+</head>
+
+<body onLoad="init();">
+
+	<h1 class=text-center>PeerStreamer powered web page</h1>
+
+	<div id="main-panel" class=panel>
+		<div id="vlc-plugin" >
+		<!-- <object classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921" codebase="http://download.videolan.org/pub/videolan/vlc/last/win32/axvlc.cab"></object> -->
+			<embed pluginspage="http://www.videolan.org"
+				type="application/x-vlc-plugin"
+				version="VideoLAN.VLCPlugin.2"
+				width="720" volume="50"
+				height="480"
+				name="vlc" id="vlc"
+				autoplay="true" allowfullscreen="true" windowless="true" loop="true" toolbar="false"
+				target="udp://@:7710">
+			</embed>
+		</div>
+
+		<div id="channel-list" >
+			<span class='label'> PeerStreamer Channels </span>
+			<input type=button id="upChannels" value="Update" onClick='updateChannels();'>
+			<select id="ChannelsList" name="channels" width="200" style="width: 300px" MULTIPLE SIZE=10 AUTOFOCUS REQUIRED onChange='doPlay(this.value);' onClick='doPlay(this.value);'></select>
+			<span class='label'> Channels Status:  </span>
+			<span id="ChannelsLog" style="text-align:center">...</span>
+		</div>
+	</div>
+
+	<div id=control-panel class=panel>
+		<div id='playout-controls' >
+			<input type=button id="Play" value=" Pause " onClick='PlayPause();'>
+			<input type=button id="Stop" value=" Stop " onClick='stop();'>
+			<input type=button id="Fullscreen" value=" Fullscreen " onClick='fullscreen();'>
+			<select readonly name="aspect" onChange="doAspectRatio(this.value);"> 
+				 <option value="Aspect Ratio" disabled selected>Aspect Ratio</option>
+				 <option value="1:1">1:1</option>
+				 <option value="4:3">4:3</option>
+				 <option value="5:4">5:4</option>
+				 <option value="16:9">16:9</option>
+				 <option value="16:10">16:10</option>
+				 <option value="221:100">221:100</option>
+			</select>
+	<div id="version-div" class=" text-center">
+		<span class=label>Version: </span><span id="version" class=varText >N/D</span>
+	</div>
+		</div>
+		<div id="volume-controls" >
+			<span class='label' style="text-align:center">Volume:</span>
+			<input type=button value=" - " onClick='updateVolume(-10)'>
+			<input type=button value=" + " onClick='updateVolume(+10)'>
+			<input type=button id="Mute" value=" Mute " onClick='mute();'>
+			<select readonly onChange='doAudioChannel(this.value)'>
+				 <option value=1>Stereo</option>
+				 <option value=2>Reverse stereo</option>
+				 <option value=3>Left</option>
+				 <option value=4>Right</option>
+				 <option value=5>Dolby</option>
+			</select>
+			<!--
+			<span class='label'>Audio Track:</span>
+			<input type=button value=" + " onClick='doAudioTrack(1);'>
+			<span id="trackTextField" style="text-align:center">..</span>
+			<input type=button value=" - " onClick='doAudioTrack(-1);'> -->
+		</div>
+		<div id="information" >
+			<p class=label>VLC plugin status: <span class=varText id=state>N/D</span></p>
+			<p class=label>ReST controller status:</p>
+<!--
+			<object id=controller_data class=data_storage data=http://127.0.0.1:1234/about > 
+				Error: Embedded data could not be displayed. 
+			</object> 
+-->
+		</div>
+	</div>
+<!--
+	<div id="information">
+		State: <span id="state" style="text-align:center" onmouseover='doState();'>...</span>
+		Video fps <span id="fps" style="text-align:center" onmouseover='upVideoInfo();'>...</span>
+		displayed <span id="display" style="text-align:center" onmouseover='upVideoInfo();'>...</span>
+		position <span id="position" style="text-align:center" onmouseover='upVideoInfo();'>...</span>
+		time <span id="time" style="text-align:center" onmouseover='upVideoInfo();'>...</span>
+		rate <span id="rate" style="text-align:center" onmouseover='upVideoInfo();'>...</span>
+		Channel <span id="channel" style="text-align:center" onmouseover='upVideoInfo();'>...</span>
+	</div>
+-->
+</body>
+</html>

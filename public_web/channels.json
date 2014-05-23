@@ -1,0 +1,7 @@
+{
+   "napasource": {
+    "channels": [
+     {"id":1, "title":"MYCHANNEL", "source":"10.139.40.130", "port":"6000", "width":"854", "height":"480"}
+    ]
+   }
+}

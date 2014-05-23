@@ -1,0 +1,42 @@
+body {
+	margin:0px;
+	padding:0px;
+	background-color:lightgray;
+}
+
+.text-center{
+	text-align:center;
+}
+.panel {
+	margin-top:0%;
+	margin-left:5%;
+	width:90%;
+	clear:both;
+	text-align:center;
+}
+#vlc-plugin {
+	width:70%;
+	float:left;
+}
+#channel-list {
+	width:30%;
+	float:left;
+}
+#playout-controls {
+	margin-top:5%;
+	width:30%;
+	float:left;
+}
+#volume-controls {
+	margin-top:5%;
+	width:30%;
+	float:left;
+}
+#rest-controller {
+	width:40%;
+	float:left;
+}
+#version-div {
+	margin-top:10%;
+}
+

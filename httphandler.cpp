@@ -153,11 +153,14 @@ void parse_args(int argc, char *const *argv)
 {
 	int c;
 	ConfManager* ist = ConfManager::instance();
-	while ((c = getopt (argc, argv, "f:p:s:u:hmv")) != -1)
+	while ((c = getopt (argc, argv, "a:f:p:s:u:hmv")) != -1)
   	switch (c)
     {
 			case 'p':	
 				ist->set_http_port(atoi(optarg));
+				break;
+			case 'a':	
+				ist->set_udp_addr((optarg));
 				break;
 			case 'u':
 				ist->set_udp_port(atoi(optarg));

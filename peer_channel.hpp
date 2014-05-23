@@ -125,8 +125,8 @@ class ChannelStreamer {
 		string get_outmodule_flags(PeerChannel* pc)
 		{
 			std::ostringstream oss;
-			oss << "/dev/stdout,dechunkiser=udp,addr=127.0.0.1,port0=" << pc->get_local_udp_port();
-			return oss.str();
+			oss << "/dev/stdout,dechunkiser=udp,port0=" << pc->get_local_udp_port() << ",addr=" << ConfManager::udp_addr();
+	return oss.str();
 		}
 
 		bool killCurrent()
